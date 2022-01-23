@@ -3,7 +3,7 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: 'AIzaSyBT2h2uehAyL-Y1qY8FlpLrFrFw5nnVe3k',
   authDomain: 'todo-ts-bae9a.firebaseapp.com',
   projectId: 'todo-ts-bae9a',
@@ -14,5 +14,5 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app)
-export const db = getFirestore(app);
+// export const auth = getAuth(app)
+// export const db = getFirestore(app);
