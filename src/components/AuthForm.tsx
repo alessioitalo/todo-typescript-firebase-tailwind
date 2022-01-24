@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { initializeApp } from 'firebase/app';
-import { firebaseConfig } from '../firebase.config';
-
-// initializing Firebase App
-initializeApp(firebaseConfig);
 
 // props interface for AuthForm Component
 interface AuthFormProps {

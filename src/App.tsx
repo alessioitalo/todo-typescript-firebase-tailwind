@@ -2,7 +2,10 @@ import AddToDo from './components/AddToDo';
 import Todos from './components/Todos';
 import { useState, useEffect } from 'react';
 import AuthForm from './components/AuthForm';
-// import { app } from './firebase.config';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from './firebase.config';
+
+initializeApp(firebaseConfig);
 
 function App() {
   const [theme, setTheme] = useState<string>('');
