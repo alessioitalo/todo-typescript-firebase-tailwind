@@ -1,27 +1,19 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { getAuth, signOut } from 'firebase/auth';
 
 interface TodosContainerProps {
   children: React.ReactNode;
-  loggedIn: boolean;
+  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TodosContainer = ({ children, loggedIn }: TodosContainerProps) => {
-  const navigate = useNavigate();
+const TodosContainer = ({ children, setLoggedIn }: TodosContainerProps) => {
 
   const auth = getAuth();
 
-  useEffect(() => {
-    if (!loggedIn) {
-      navigate('/login');
-    }
-  });
 
   const signOutHandler = async () => {
     signOut(auth)
       .then(() => {
-        navigate('/login');
+        setLoggedIn(false);
       })
       .catch((error) => {
         console.log(error);

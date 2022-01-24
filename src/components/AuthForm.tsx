@@ -1,26 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 
-// // props interface for AuthForm Component
-interface AuthFormProps {
-  loggedIn: boolean;
-}
-
-// const AuthForm = ({ setLoggedIn }: AuthFormProps) => {
-const AuthForm = ({ loggedIn }: AuthFormProps) => {
+const AuthForm = () => {
   const auth = getAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (loggedIn) {
-      navigate('/');
-    }
-  });
 
   // component state checking if user is loggin in or signing up
   const [loginMode, setLoginMode] = useState<boolean>(true);
@@ -47,6 +33,7 @@ const AuthForm = ({ loggedIn }: AuthFormProps) => {
   const authFormSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     // validation to be written here
+    // error handling to be added here
     try {
       if (loginMode) {
         await signInWithEmailAndPassword(
@@ -61,14 +48,10 @@ const AuthForm = ({ loggedIn }: AuthFormProps) => {
           userData.password
         );
       }
-      // user = userResponse.user;
-      navigate('/');
-      // console.log(user);
-      // console.log(auth.currentUser)
     } catch (err) {
       console.log('ERROR');
       console.log(err);
-      // proper error handling to be added here
+      // error handling to be added here
     }
   };
 
