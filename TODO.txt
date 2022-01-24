@@ -1,1 +1,4 @@
 types/interfaces for Todos.tsx (state and todosArray)
+
+error handling - toastify?
+

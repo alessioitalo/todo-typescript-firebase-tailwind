@@ -64,12 +64,12 @@ function App() {
       ) : loggedIn ? (
         <div className='relative bottom-32 w-[90vw] sm:w-[80vw] md:w-[50vw]  '>
           <TodosContainer setLoggedIn={setLoggedIn}>
-            <AddToDo />
+            <AddToDo uid={uid}/>
             <Todos uid={uid} />
           </TodosContainer>
         </div>
       ) : (
-        <div className='relative bottom-32 w-[90vw] sm:w-[80vw] md:w-[50vw]  '>
+        <div className='relative bottom-32 w-[90vw] sm:w-[80vw] md:w-[50vw]'>
           <AuthForm />
         </div>
       )}
