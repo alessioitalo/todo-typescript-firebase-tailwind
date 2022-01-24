@@ -1,0 +1,2 @@
+- login form must be visible if not authorized
+- actual todos cannot be visible if not authorized

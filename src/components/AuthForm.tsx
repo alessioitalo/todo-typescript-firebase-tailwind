@@ -1,45 +1,72 @@
-// import {
-//   getAuth,
-//   createUserWithEmailAndPassword,
-//   signInWithEmailAndPassword,
-// } from 'firebase/auth';
-// import { firebaseConfig } from '../firebase.config';
-// import { initializeApp } from 'firebase/app';
 import React, { useState } from 'react';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from '../firebase.config';
 
-// const app = initializeApp(firebaseConfig);
+// initializing Firebase App
+initializeApp(firebaseConfig);
 
-const AuthForm = () => {
+// props interface for AuthForm Component
+interface AuthFormProps {
+  setUserLoggedIn: (value: boolean) => void;
+}
+
+const AuthForm = ({ setUserLoggedIn }: AuthFormProps) => {
+  // component state checking if user is loggin in or signing up
   const [loginMode, setLoginMode] = useState<boolean>(true);
 
+  //  interface for user information state
   interface authData {
     email: string;
     password: string;
     confirm?: string;
   }
+
+  // initial state for user information
   const [userData, setUserData] = useState<authData>({
     email: '',
     password: '',
   });
 
+  // updating user information state on input change
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUserData({...userData, [e.target.name] : e.target.value})
-  }
+    setUserData({ ...userData, [e.target.name]: e.target.value });
+  };
 
-  const authFormSubmitHandler = (e: React.FormEvent) => {
-      e.preventDefault();
-    //   const auth = getAuth();
-    //   if (loginMode) {
-    //     signInWithEmailAndPassword(auth, userData.email, userData.password).then(
-    //       (userCredential) => {
-    //         const user = userCredential.user;
-    //         console.log(auth);
-    //         console.log(user)
-    //       }
-    //     );
-    //   }
-    console.log(userData)
-
+  // validating and sending auth request to firebase
+  const authFormSubmitHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // validation to be written here
+    const auth = getAuth();
+    let user;
+    let userResponse;
+    try {
+      if (loginMode) {
+        userResponse = await signInWithEmailAndPassword(
+          auth,
+          userData.email,
+          userData.password
+        );
+      } else {
+        userResponse = await createUserWithEmailAndPassword(
+          auth,
+          userData.email,
+          userData.password
+        );
+      }
+      user = userResponse.user;
+      // console.log(user);
+      // console.log(auth.currentUser)
+      setUserLoggedIn(true);
+    } catch (err) {
+      console.log('ERROR');
+      console.log(err);
+      // proper error handling to be added here
+    }
   };
 
   return (
