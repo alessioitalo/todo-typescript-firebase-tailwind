@@ -49,7 +49,6 @@ const AuthForm = () => {
         );
       }
     } catch (err) {
-      console.log('ERROR');
       console.log(err);
       // error handling to be added here
     }

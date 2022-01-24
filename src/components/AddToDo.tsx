@@ -27,7 +27,6 @@ const AddToDo = ({ uid }: AddToDoProps) => {
     }catch(err){
       // toastify error here
     }
-    
   };
 
 

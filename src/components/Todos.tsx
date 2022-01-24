@@ -6,10 +6,13 @@ interface todosProps {
   uid: string;
 }
 
+interface todosInterface {
+  id: string;
+  data: { user: string; todo: string; completed: boolean };
+}
+
 const Todos = ({ uid }: todosProps) => {
-  const [todos, setTodos] = useState([
-    { id: '', data: { user: '', todo: '', completed:undefined } },
-  ]);
+  const [todos, setTodos] = useState<todosInterface[]>();
 
   useEffect(() => {
     let todosArray: any[] = [];
@@ -30,16 +33,22 @@ const Todos = ({ uid }: todosProps) => {
 
   return (
     <div className='my-6 rounded'>
-      {todos.map((todo) => (
-        <div
-          className='text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 dark:text-slate-200 px-6 h-12 flex items-center border-b border-b-gray-100 first:rounded-t'
-          key={todo.id}
-        >
-          {todo.data.todo}
-        </div>
-      ))}
+      {todos &&
+        todos.map((todo) => (
+          <div
+            className='text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 dark:text-slate-200 px-6 h-12 flex items-center border-b border-b-gray-100 first:rounded-t'
+            key={todo.id}
+          >
+            {todo.data.todo}
+          </div>
+        ))}
       <div className='text-gray-300 dark:text-gray-500 bg-white dark:bg-gray-700 dark:text-slate-200 px-6 h-12 flex justify-between items-center rounded-b'>
-        <span>{todos.length} items left</span><span className='cursor-pointer'>Clear Completed</span>
+        {todos && (
+          <>
+            <span>{todos.length} items left</span>
+            <span className='cursor-pointer'>Clear Completed</span>
+          </>
+        )}
       </div>
     </div>
   );
