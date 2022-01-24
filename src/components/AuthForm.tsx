@@ -87,14 +87,14 @@ const AuthForm = ({ setUserLoggedIn }: AuthFormProps) => {
           type='email'
           name='email'
           placeholder='Your Email'
-          className='my-2 rounded py-2 placeholder:px-2'
+          className='my-2 text-gray-700 rounded p-2 placeholder:px-2'
           onChange={inputChangeHandler}
         />
         <input
           type='password'
           name='password'
           placeholder='Your Password'
-          className='my-2 rounded py-2 placeholder:px-2'
+          className='my-2 text-gray-700 rounded p-2 placeholder:px-2'
           onChange={inputChangeHandler}
         />
         {!loginMode && (
@@ -102,7 +102,7 @@ const AuthForm = ({ setUserLoggedIn }: AuthFormProps) => {
             type='password'
             name='confirm'
             placeholder='Confirm Password'
-            className='my-2 rounded py-2 placeholder:px-2'
+            className='my-2 text-gray-700 rounded p-2 placeholder:px-2'
             onChange={inputChangeHandler}
           />
         )}
