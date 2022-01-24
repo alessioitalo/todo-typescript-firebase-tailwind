@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -11,6 +12,9 @@ interface AuthFormProps {
 }
 
 const AuthForm = ({ setUserLoggedIn }: AuthFormProps) => {
+
+  const navigate = useNavigate()
+
   // component state checking if user is loggin in or signing up
   const [loginMode, setLoginMode] = useState<boolean>(true);
 
@@ -54,9 +58,9 @@ const AuthForm = ({ setUserLoggedIn }: AuthFormProps) => {
         );
       }
       user = userResponse.user;
+      navigate('/')
       // console.log(user);
       // console.log(auth.currentUser)
-      setUserLoggedIn(true);
     } catch (err) {
       console.log('ERROR');
       console.log(err);
