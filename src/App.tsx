@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import AuthForm from './components/AuthForm';
 
 function App() {
-  const [theme, setTheme] = useState('');
+  const [theme, setTheme] = useState<string>('');
 
-  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
     // check for stored theme
@@ -44,7 +44,6 @@ function App() {
         ></span>
       </header>
       <div className='relative bottom-32 w-[90vw] sm:w-[80vw] md:w-[50vw]  ' >
-      {/* py-5 md:px-[25vw] */}
         {userLoggedIn ? (
           <>
             <AddToDo />
