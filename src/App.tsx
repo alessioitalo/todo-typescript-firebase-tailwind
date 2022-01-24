@@ -5,14 +5,15 @@ import AuthForm from './components/AuthForm';
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from './firebase.config';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import {useTheme} from './hooks/useTheme'
+import { useTheme } from './hooks/useTheme';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import TodosContainer from './components/TodosContainer';
 
 initializeApp(firebaseConfig);
 
 function App() {
-  const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
-  const {theme, setTheme} = useTheme()
-
+  const { theme, setTheme } = useTheme();
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -21,6 +22,17 @@ function App() {
       document.documentElement.classList.remove('dark');
     }
   }, [theme]);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setLoggedIn(true);
+      } else {
+        setLoggedIn(false);
+      }
+    });
+  });
 
   const themeChangeHandler = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
@@ -45,16 +57,13 @@ function App() {
             <Route
               path='/'
               element={
-                <>
+                <TodosContainer loggedIn={loggedIn}>
                   <AddToDo />
                   <Todos />
-                </>
+                </TodosContainer>
               }
             />
-            <Route
-              path='login'
-              element={<AuthForm setUserLoggedIn={setUserLoggedIn} />}
-            />
+            <Route path='login' element={<AuthForm loggedIn={loggedIn} />} />
           </Routes>
         </div>
       </main>

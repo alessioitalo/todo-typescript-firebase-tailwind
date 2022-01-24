@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   getAuth,
@@ -6,14 +6,21 @@ import {
   signInWithEmailAndPassword,
 } from 'firebase/auth';
 
-// props interface for AuthForm Component
+// // props interface for AuthForm Component
 interface AuthFormProps {
-  setUserLoggedIn: (value: boolean) => void;
+  loggedIn: boolean;
 }
 
-const AuthForm = ({ setUserLoggedIn }: AuthFormProps) => {
+// const AuthForm = ({ setLoggedIn }: AuthFormProps) => {
+const AuthForm = ({ loggedIn }: AuthFormProps) => {
+  const auth = getAuth();
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
+  useEffect(() => {
+    if (loggedIn) {
+      navigate('/');
+    }
+  });
 
   // component state checking if user is loggin in or signing up
   const [loginMode, setLoginMode] = useState<boolean>(true);
@@ -40,25 +47,22 @@ const AuthForm = ({ setUserLoggedIn }: AuthFormProps) => {
   const authFormSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
     // validation to be written here
-    const auth = getAuth();
-    let user;
-    let userResponse;
     try {
       if (loginMode) {
-        userResponse = await signInWithEmailAndPassword(
+        await signInWithEmailAndPassword(
           auth,
           userData.email,
           userData.password
         );
       } else {
-        userResponse = await createUserWithEmailAndPassword(
+        await createUserWithEmailAndPassword(
           auth,
           userData.email,
           userData.password
         );
       }
-      user = userResponse.user;
-      navigate('/')
+      // user = userResponse.user;
+      navigate('/');
       // console.log(user);
       // console.log(auth.currentUser)
     } catch (err) {
