@@ -1,2 +1,6 @@
 - login form must be visible if not authorized
 - actual todos cannot be visible if not authorized
+
+- react router to be installed 
+- protected route on '/'
+- if !auth, redirect to '/login'
