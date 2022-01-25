@@ -31,13 +31,9 @@ body {
   background-position: center;
 }
 
-div:focus,
-div:active,
-div:visited button:focus,
-span:focus,
-span:active,
-span:visited button:focus,
-button:visited,
-button:active{
-  outline: none;
+input,
+button,
+div,
+span {
+  -webkit-tap-highlight-color: transparent
 }
