@@ -25,7 +25,19 @@ body {
 }
 
 .circle-active {
-  background-image: url('../public/checkmark-16.png'), linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+  background-image: url('../public/checkmark-16.png'),
+    linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
   background-repeat: no-repeat;
   background-position: center;
+}
+
+div:focus,
+div:active,
+div:visited button:focus,
+span:focus,
+span:active,
+span:visited button:focus,
+button:visited,
+button:active,{
+  outline: none;
 }
