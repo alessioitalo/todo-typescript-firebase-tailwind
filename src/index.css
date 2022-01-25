@@ -38,6 +38,6 @@ span:focus,
 span:active,
 span:visited button:focus,
 button:visited,
-button:active,{
+button:active{
   outline: none;
 }
