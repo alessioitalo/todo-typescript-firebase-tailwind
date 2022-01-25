@@ -118,6 +118,10 @@ const AuthForm = () => {
           SUBMIT
         </button>
       </form>
+      <p className='px-2 sm:px-12 text-center'>
+        For demo purposes, use the following credentials:{' '}
+        <i>admin@noemail.com</i> - <i>password1</i>
+      </p>
     </div>
   );
 };

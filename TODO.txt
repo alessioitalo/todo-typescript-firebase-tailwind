@@ -1,6 +1,0 @@
-
-error handling - toastify?
-
-auth validation
-
-orderBy timestamp
