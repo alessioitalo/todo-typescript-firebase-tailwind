@@ -8,15 +8,46 @@ import { useTheme } from './hooks/useTheme';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import TodosContainer from './components/TodosContainer';
 import Spinner from './components/Spinner';
+import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { db } from './firebase.config';
 
 initializeApp(firebaseConfig);
 
+export interface todosInterface {
+  id: string;
+  data: { user: string; todo: string; completed: boolean; time: Date };
+}
+
 function App() {
   const { theme, setTheme } = useTheme();
+
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const [todos, setTodos] = useState<todosInterface[]>();
+
   const [uid, setUid] = useState<string>('');
+
+  const themeChangeHandler = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('theme', newTheme);
+    setTheme(localStorage.getItem('theme')!);
+  };
+
+  const fetchTodos = async () => {
+    let todosArray: any[] = [];
+    const todosRef = collection(db, 'todos');
+    const q = query(todosRef, where('user', '==', uid));
+    const snapshot = await getDocs(q);
+    snapshot.forEach((doc) => {
+      return todosArray.push({
+        id: doc.id,
+        data: doc.data(),
+      });
+    });
+    console.log(todosArray)
+    setTodos(todosArray);
+  };
 
   useEffect(() => {
     if (theme === 'dark') {
@@ -42,12 +73,6 @@ function App() {
     }, 300);
   });
 
-  const themeChangeHandler = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    localStorage.setItem('theme', newTheme);
-    setTheme(localStorage.getItem('theme')!);
-  };
-
   return (
     <main className='flex flex-col items-center h-screen bg-gray-100 dark:bg-gray-900'>
       <header className='w-screen h-80 pb-10 flex justify-between items-center bg-mobile-light md:bg-desk-light dark:bg-mobile-dark dark:md:bg-desk-dark bg-no-repeat bg-cover'>
@@ -62,10 +87,10 @@ function App() {
       {loading ? (
         <Spinner />
       ) : loggedIn ? (
-        <div className='relative bottom-32 w-[90vw] sm:w-[80vw] md:w-[50vw]  '>
+        <div className='relative -top-28 w-[90vw] sm:w-[80vw] md:w-[50vw]  '>
           <TodosContainer setLoggedIn={setLoggedIn}>
-            <AddToDo uid={uid}/>
-            <Todos uid={uid} />
+            <AddToDo uid={uid} fetchTodos={fetchTodos} />
+            <Todos uid={uid} todos={todos} fetchTodos={fetchTodos} setTodos={setTodos}/>
           </TodosContainer>
         </div>
       ) : (

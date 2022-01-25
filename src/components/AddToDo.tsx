@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { doc, setDoc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase.config';
-import { nanoid } from 'nanoid'
+import { nanoid } from 'nanoid';
+// import { todosInterface } from '../App';
 
 interface AddToDoProps {
   uid: string;
+  fetchTodos: () => void;
+  // setTodos: React.Dispatch<React.SetStateAction<todosInterface[]>>;
 }
 
-
-const AddToDo = ({ uid }: AddToDoProps) => {
+const AddToDo = ({ uid, fetchTodos }: AddToDoProps) => {
   const [newTodo, setNewTodo] = useState('');
   const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodo(e.target.value);
@@ -16,19 +18,22 @@ const AddToDo = ({ uid }: AddToDoProps) => {
 
   const formSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    try{
+    try {
       await setDoc(doc(db, 'todos', nanoid()), {
         user: uid,
         todo: newTodo,
         time: Timestamp.fromDate(new Date()),
         completed: false,
       });
+      setNewTodo('');
+      fetchTodos();
+      // setTodos();
+
       // toastify success here
-    }catch(err){
+    } catch (err) {
       // toastify error here
     }
   };
-
 
   return (
     <form onSubmit={formSubmitHandler} className='h-12'>
