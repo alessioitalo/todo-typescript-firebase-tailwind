@@ -2,6 +2,7 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  // delete,
   query,
   collection,
   where,
@@ -35,21 +36,27 @@ const Todos = ({ todos, setTodos, fetchTodos, uid }: todosProps) => {
     await updateDoc(todoRef, {
       completed: true,
     });
+
+    fetchTodos()
+
   };
 
-  const deleteCompletedHandler = async () => {
+  const deleteCompletedHandler = () => {
     setTodos((prevState) =>
-      prevState!.filter((todo) => todo.data.completed !== true)
+      prevState?.filter((todo) => todo.data.completed === false)
     );
 
-    // must delete here
+    const toDelete = todos?.filter((todo) => todo.data.completed === true);
+    toDelete?.forEach(async (todo) => {
+      await deleteDoc(doc(db, 'todos', todo.id));
+    });
 
-    // const todosRef = collection(db, 'todos');
-    // const q = query(todosRef, where('complete', '==', true));
-    // const snapshot = await getDocs(q);
-    // snapshot.forEach(async (todo) => {
-    //   await deleteDoc(doc(db, 'todos', todo.id));
-    // });
+    // setTodos([
+    //   {
+    //     id: '33',
+    //     data: { todo: 'ss', completed: false, user: uid, time: new Date() },
+    //   },
+    // ]);
   };
 
   return (
@@ -64,7 +71,7 @@ const Todos = ({ todos, setTodos, fetchTodos, uid }: todosProps) => {
             key={todo.id}
             onClick={() => completeToDoHandler(todo.id)}
           >
-            {todo.data.todo}
+            <span className='curs'>{todo.data.todo}</span>
           </div>
         ))}
       <div className='text-gray-300 dark:text-gray-500 bg-white dark:bg-gray-700 dark:text-slate-200 px-6 h-12 flex justify-between items-center rounded-b'>

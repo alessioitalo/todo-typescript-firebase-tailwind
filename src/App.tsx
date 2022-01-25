@@ -45,7 +45,6 @@ function App() {
         data: doc.data(),
       });
     });
-    console.log(todosArray)
     setTodos(todosArray);
   };
 
