@@ -1,9 +1,12 @@
+//react imports
 import { useState } from 'react';
+// firebase
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 const AuthForm = () => {
   const auth = getAuth();
@@ -32,8 +35,24 @@ const AuthForm = () => {
   // validating and sending auth request to firebase
   const authFormSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    // validation to be written here
-    // error handling to be added here
+    if (!userData.email || !userData.password) {
+      toast.error('Please fill all fields.');
+      return;
+    }
+    if (userData.password.length < 6) {
+      toast.error('Please enter at least 6 characters for your password.');
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(userData.email.toLowerCase())) {
+      toast.error('Please enter a correct email address');
+      return;
+    }
+    if (!loginMode) {
+      if (userData.password !== userData.confirm) {
+        toast.error('Your passwords do not match.');
+        return;
+      }
+    }
     try {
       if (loginMode) {
         await signInWithEmailAndPassword(
@@ -49,8 +68,7 @@ const AuthForm = () => {
         );
       }
     } catch (err) {
-      console.log(err);
-      // error handling to be added here
+      toast.error('Login was unsuccessful: ' + err);
     }
   };
 

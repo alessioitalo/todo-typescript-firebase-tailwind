@@ -1,15 +1,21 @@
+//react imports
+import { useState, useEffect } from 'react';
+// components imports
 import AddToDo from './components/AddToDo';
 import Todos from './components/Todos';
-import { useState, useEffect } from 'react';
 import AuthForm from './components/AuthForm';
-import { initializeApp } from 'firebase/app';
-import { firebaseConfig } from './firebase.config';
-import { useTheme } from './hooks/useTheme';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import TodosContainer from './components/TodosContainer';
 import Spinner from './components/Spinner';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
+import { useTheme } from './hooks/useTheme';
+// firebase
+import { initializeApp } from 'firebase/app';
 import { db } from './firebase.config';
+import { firebaseConfig } from './firebase.config';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+// other libraries
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 initializeApp(firebaseConfig);
 
@@ -19,21 +25,28 @@ export interface todosInterface {
 }
 
 function App() {
+  // custom hook checking for theme stored locally
   const { theme, setTheme } = useTheme();
-
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  const [todos, setTodos] = useState<todosInterface[]>();
-
-  const [uid, setUid] = useState<string>('');
-
+  // effect applying theme stored locally
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+  // function to store new theme locally
   const themeChangeHandler = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     localStorage.setItem('theme', newTheme);
     setTheme(localStorage.getItem('theme')!);
   };
-
+  // state definitions
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [todos, setTodos] = useState<todosInterface[]>();
+  const [uid, setUid] = useState<string>('');
+  // function to fetch data from firestore
   const fetchTodos = async () => {
     let todosArray: any[] = [];
     const todosRef = collection(db, 'todos');
@@ -47,15 +60,7 @@ function App() {
     });
     setTodos(todosArray);
   };
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
-
+  // effect checking for auth change
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
@@ -89,7 +94,12 @@ function App() {
         <div className='relative -top-28 w-[90vw] sm:w-[80vw] md:w-[50vw]  '>
           <TodosContainer setLoggedIn={setLoggedIn}>
             <AddToDo uid={uid} fetchTodos={fetchTodos} />
-            <Todos uid={uid} todos={todos} fetchTodos={fetchTodos} setTodos={setTodos}/>
+            <Todos
+              uid={uid}
+              todos={todos}
+              fetchTodos={fetchTodos}
+              setTodos={setTodos}
+            />
           </TodosContainer>
         </div>
       ) : (
@@ -97,6 +107,7 @@ function App() {
           <AuthForm />
         </div>
       )}
+      <ToastContainer autoClose={2000}/>
     </main>
   );
 }

@@ -1,4 +1,6 @@
+// firebase
 import { getAuth, signOut } from 'firebase/auth';
+import { toast } from 'react-toastify';
 
 interface TodosContainerProps {
   children: React.ReactNode;
@@ -6,18 +8,13 @@ interface TodosContainerProps {
 }
 
 const TodosContainer = ({ children, setLoggedIn }: TodosContainerProps) => {
-
   const auth = getAuth();
 
-
   const signOutHandler = async () => {
-    signOut(auth)
-      .then(() => {
-        setLoggedIn(false);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    signOut(auth).then(() => {
+      setLoggedIn(false);
+    });
+    toast.success('You have successfully logged out.')
   };
 
   return (

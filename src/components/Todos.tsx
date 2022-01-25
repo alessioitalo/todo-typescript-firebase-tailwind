@@ -1,16 +1,11 @@
-import {
-  doc,
-  updateDoc,
-  deleteDoc,
-  // delete,
-  query,
-  collection,
-  where,
-  getDocs,
-} from 'firebase/firestore';
-import { db } from '../firebase.config';
+//react imports
 import { useEffect } from 'react';
+// interfaces
 import { todosInterface } from '../App';
+// firebase
+import { db } from '../firebase.config';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { toast } from 'react-toastify';
 
 interface todosProps {
   uid: string;
@@ -26,37 +21,47 @@ interface todosProps {
 
 const Todos = ({ todos, setTodos, fetchTodos, uid }: todosProps) => {
   useEffect(() => {
-    // try catch?
-    fetchTodos();
+    try {
+      fetchTodos();
+    } catch (err) {
+      toast.error('Something went wrong. Please refresh the page.');
+    }
   }, [uid]);
 
   const completeToDoHandler = async (id: string) => {
-    document.getElementById(id)?.classList.add('line-through');
-    const todoRef = doc(db, 'todos', id);
-    await updateDoc(todoRef, {
-      completed: true,
-    });
-
-    fetchTodos()
-
+    const todoDomElement = document.getElementById(id)!;
+    const circleDomElement = document.getElementById('circle' + id);
+    if (todoDomElement.classList.contains('line-through')) {
+      todoDomElement.classList.remove('line-through');
+      circleDomElement?.classList.remove('circle-active')
+      const todoRef = doc(db, 'todos', id);
+      await updateDoc(todoRef, {
+        completed: false,
+      });
+    } else {
+      todoDomElement.classList.add('line-through');
+      circleDomElement?.classList.add('circle-active')
+      const todoRef = doc(db, 'todos', id);
+      await updateDoc(todoRef, {
+        completed: true,
+      });
+    }
+    fetchTodos();
   };
 
   const deleteCompletedHandler = () => {
-    setTodos((prevState) =>
-      prevState?.filter((todo) => todo.data.completed === false)
-    );
-
-    const toDelete = todos?.filter((todo) => todo.data.completed === true);
-    toDelete?.forEach(async (todo) => {
-      await deleteDoc(doc(db, 'todos', todo.id));
-    });
-
-    // setTodos([
-    //   {
-    //     id: '33',
-    //     data: { todo: 'ss', completed: false, user: uid, time: new Date() },
-    //   },
-    // ]);
+    try {
+      setTodos((prevState) =>
+        prevState?.filter((todo) => todo.data.completed === false)
+      );
+      const toDelete = todos?.filter((todo) => todo.data.completed === true);
+      toDelete?.forEach(async (todo) => {
+        await deleteDoc(doc(db, 'todos', todo.id));
+      });
+      toast.success('Completed tasks have been deleted.');
+    } catch (err) {
+      toast.error('Something went wrong. Please refresh the page.');
+    }
   };
 
   return (
@@ -65,22 +70,31 @@ const Todos = ({ todos, setTodos, fetchTodos, uid }: todosProps) => {
         todos.map((todo) => (
           <div
             id={todo.id}
-            className={`${
-              todo.data.completed && 'line-through'
-            } text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 dark:text-slate-200 px-6 h-12 flex items-center border-b border-b-gray-100 first:rounded-t`}
+            className={
+              'flex justify-end relative text-gray-700 dark:text-gray-100 bg-white dark:bg-gray-700 px-6 h-fit flex items-center border-b border-b-gray-100 first:rounded-t'
+            }
             key={todo.id}
             onClick={() => completeToDoHandler(todo.id)}
           >
-            <span className='curs'>{todo.data.todo}</span>
+            <span
+              id={`circle-${todo.id}`}
+              className={`circle ${todo.data.completed && 'circle-active'}`}
+            ></span>
+            <span
+              className={`cursor-pointer min-w-min w-[90%] text-left pl-2 py-3 ${
+                todo.data.completed && 'line-through'
+              }`}
+            >
+              {todo.data.todo}
+            </span>
           </div>
         ))}
-      <div className='text-gray-300 dark:text-gray-500 bg-white dark:bg-gray-700 dark:text-slate-200 px-6 h-12 flex justify-between items-center rounded-b'>
+      <div className='flex text-gray-300 dark:text-gray-500 bg-white dark:bg-gray-700 px-6 h-12 flex justify-between items-center rounded-b'>
         {todos && (
           <>
-            {/* <span>{todos.length} items left</span> */}
             <span>
-              {todos.filter((todo) => todo.data.completed !== true).length}{' '}
-              items
+              Number of tasks left:{' '}
+              {todos.filter((todo) => todo.data.completed !== true).length}
             </span>
             <span onClick={deleteCompletedHandler} className='cursor-pointer'>
               Clear Completed

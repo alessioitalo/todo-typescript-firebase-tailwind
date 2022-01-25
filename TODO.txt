@@ -3,4 +3,4 @@ error handling - toastify?
 
 auth validation
 
-add delete where firestore
+orderBy timestamp

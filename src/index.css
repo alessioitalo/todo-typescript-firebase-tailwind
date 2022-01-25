@@ -7,6 +7,25 @@ body {
   margin: 0;
 }
 
-#root{
+#root {
   height: 100%;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: transparent;
+  outline: 1px solid gray;
+  position: absolute;
+  top: calc(50% - 15px);
+  left: 0px;
+  margin-left: 15px;
+  cursor: pointer;
+}
+
+.circle-active {
+  background-image: url('../public/checkmark-16.png'), linear-gradient(hsl(192, 100%, 67%), hsl(280, 87%, 65%));
+  background-repeat: no-repeat;
+  background-position: center;
 }

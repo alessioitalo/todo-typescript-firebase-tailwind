@@ -1,13 +1,15 @@
+//react imports
 import React, { useState } from 'react';
-import { doc, setDoc, Timestamp } from 'firebase/firestore';
+// firebase
 import { db } from '../firebase.config';
+import { doc, setDoc, Timestamp } from 'firebase/firestore';
+// other libraries
 import { nanoid } from 'nanoid';
-// import { todosInterface } from '../App';
+import { toast } from 'react-toastify';
 
 interface AddToDoProps {
   uid: string;
   fetchTodos: () => void;
-  // setTodos: React.Dispatch<React.SetStateAction<todosInterface[]>>;
 }
 
 const AddToDo = ({ uid, fetchTodos }: AddToDoProps) => {
@@ -18,6 +20,10 @@ const AddToDo = ({ uid, fetchTodos }: AddToDoProps) => {
 
   const formSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (newTodo.length < 2) {
+      toast.error('Please enter a new task.');
+      return;
+    }
     try {
       await setDoc(doc(db, 'todos', nanoid()), {
         user: uid,
@@ -27,11 +33,9 @@ const AddToDo = ({ uid, fetchTodos }: AddToDoProps) => {
       });
       setNewTodo('');
       fetchTodos();
-      // setTodos();
-
-      // toastify success here
+      toast.success('New task added!');
     } catch (err) {
-      // toastify error here
+      toast.error('Something went wrong, please try again.');
     }
   };
 
