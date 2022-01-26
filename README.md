@@ -5,13 +5,13 @@ A ToDo application inspired to this [Frontend Mentor challenge](https://www.fron
 
 ## Built with
 
--[TypeScript](https://www.typescriptlang.org/)
--[React](https://reactjs.org/)
--[TailwindCSS](https://tailwindcss.com/)
--[Firebase](https://firebase.google.com/)
--[React-Toastify](https://fkhadra.github.io/react-toastify/introduction)
--[React-Testing-Library](https://testing-library.com/docs/react-testing-library/intro/)
--[Nanoid](https://github.com/ai/nanoid)
+- [TypeScript](https://www.typescriptlang.org/)
+- [React](https://reactjs.org/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Firebase](https://firebase.google.com/)
+- [React-Toastify](https://fkhadra.github.io/react-toastify/introduction)
+- [React-Testing-Library](https://testing-library.com/docs/react-testing-library/intro/)
+- [Nanoid](https://github.com/ai/nanoid)
 
 ## Live application
 
